@@ -1,0 +1,326 @@
+﻿@model Today.Web.ViewModels.ChenkoutVM
+@{
+    int totalPrice = 0;
+}
+@section topCSS{
+    <link rel="stylesheet" href="~/css/reset.css">
+    <link rel="stylesheet" href="~/css/Checkout.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+}
+    @section endJS{
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })
+    </script>
+}
+    
+    
+    <div class="container-fluid">
+        <div class="Orderinformation mw-100 pt-5">
+            <div class="container row m-auto pt-4">
+               
+
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                       
+                    <ol class="breadcrumb ms-2">
+                        <li class="breadcrumb-item fw-bolder">付款</li>
+                        <li class="breadcrumb-item active" aria-current="page">訂購完成</li>
+                    </ol>
+                </nav>
+
+                <div class="accordion mb-3" id="accordionExample">
+                    <div class="accordion-item">
+                        <div class="accordion-header" id="headingOne">
+                            <div class="a bg-white d-flex align-items-center my-4 " data-bs-toggle="collapse"
+                                data-bs-target="#Ordererinformation">
+                                <i class="fa-solid fa-chevron-down mx-3"></i>
+                                <h4 class="page-head ">訂購人資料
+                                </h4>
+                            </div>
+                        </div>
+                        <div id="Ordererinformation" class="accordion-collapse collapse show border-top"
+                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="page-text">
+                                    <form class="row g-3 needs-validation" id="profile" novalidate>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6 col-xs-12 mt-4 mx-4">
+                                                <label for="validationCustom01" class="form-label">名字
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control" id="validationCustom01" type="text" value="@Model.OrderMember.Name" aria-label="Disabled input example" disabled readonly>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6 col-xs-12 mt-4 mx-4">
+                                                <label for="validationCustom08" class="form-label ">地區
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control" id="validationCustom08" type="text" value="@Model.OrderMember.CityName" aria-label="Disabled input example" disabled readonly>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6 col-xs-12 mt-4 mx-4">
+                                                <label for="validationCustom09" class="form-label">電話號碼
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                 <input class="form-control" id="validationCustom09" type="text" value="@Model.OrderMember.PhoneNumber" aria-label="Disabled input example" disabled readonly>
+                                               
+                                            </div>
+                                            <div class="col-md-8 col-xs-12 mt-4 mx-4">
+                                                <label for="validationCustom10" class="form-label">聯絡 E-mail
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input class="form-control" id="validationCustom10" type="text" value="@Model.OrderMember.Email" aria-label="Disabled input example" disabled readonly>
+                                            </div>
+                                           
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="Passengerinformation-fliud">
+                    <div class="Passengerinformation mt-3 mb-2 ms-2 ">
+                        <h3 class=""> 選擇折扣</h3>
+                    </div>
+                </div>
+                <!-- 旅客資料info -->
+                <div class="accordion mt-2 " id="accordionExample">
+                    <div class="accordion-item">
+                       
+                        @foreach(var od in Model.OrderProduct)
+                        {
+                            <div class="accordion-header " id="headingtwo">
+                                <div class="bg-white d-flex align-items-center collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#Passengerinformation" aria-expanded="false">
+                                    <i class="fa-solid fa-chevron-down mx-2"></i>
+                                    <!-- 旅客資料 title -->
+                                    <div class="cart-item d-flex flex-wrap align-items-center justify-content-evenly py-3 border-bottom">
+                                        <a href="#" class=" rounded-3 img-fluid col-md-3">
+                                            <img class="product-img img-bg w-100 col-sm-4" src="@od.Photo">
+                                        </a>
+                                        <div class="car-detail col-sm-8 ms-1 col-md-8">
+                                            <div class="product-detail">
+                                                <h3 class="title my-2 me-2">
+                                                    <a href="#" class="product_detail_text text-dark" target="_blank" onclick="event.stopPropagation()">
+                                                        <span style="font-size: smaller"> @od.ProductName</span>
+                                                    </a>
+                                                </h3>
+                                                <div class="product-option text-dark my-3">@od.ProgramTitle</div>
+                                          
+                                                <div class="mix d-flex">
+                                                    <div class="product-option mb-3 me-3 flex-wrap">@od.SceenLists
+                                                    </div>
+                                                
+                                                </div>
+
+                                            </div>
+
+                                            <div class="critical-info d-inline-block ">
+                                                <i class="fa-solid fa-calendar-days me-2"></i>
+                                                <span>@od.DepartureDate</span>
+                                            </div>
+                                        
+                                            <div class="critical-info d-inline-block ms-2">
+                                                <i class="fa-solid fa-person mx-2"></i>
+                                                <span>@(od.Itemtext) x @(od.Quantity)  @(od.UnitText)</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    <div id="Passengerinformation" class="accordion-collapse collapse" aria-labelledby="headingtwo"data-bs-parent="#accordionExample" style="">
+                        <div class="accordion-body">
+
+                                <!-- 使用折扣券 -->
+                                <div class="Use-coupons">
+                                    <div class="sub-title my-3">
+                                        <i class="fa-solid fa-minus"></i>
+                                        <span class="fw-bolder">使用折扣券</span>
+                                    </div>
+
+
+                                    <button type="button" class="booking-coupon btn btn-light mt-2 ms-3 shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fa-solid fa-ticket me-3"></i>使用折扣券
+                                    </button>
+                                    <div class="col-12 mt-3 ms-3">
+                                        <button class="btn btn-info text-light" type="submit">繼續</button>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                            <div class="modal-content rounded-3">
+                                                <div class="modal-header border-0 p-0 px-3 pt-3 fs-5">
+                                                    <h2 class="modal-title fw-bold" id="exampleModalLabel">使用折扣券</h2>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="page-head">
+                                                        <!-- <h2>KKday 折扣劵</h2> -->
+
+                                                        <ul class="nav nav-tabs">
+                                                            <li class="nav-item active">
+                                                                <a href="#profile">可使用</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a href="#buddy">已使用</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a href="#buddy">無法使用</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-md-6 mt-4">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="請輸入折扣碼"
+                                                                aria-label="請輸入折扣碼" aria-describedby="button-addon2">
+                                                            <button class="btn btn-info text-light" type="button"
+                                                                id="button-addon2">增加</button>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="page-text">
+                                                        <div class="coupon-group">
+                                                            <div class="coupon">
+                                                                <div class="coupon-text my-3">
+                                                                    <img src="https://cdn.kkday.com/pc-web/assets/img/empty_state/coupon_list.svg"
+                                                                        width="140" height="140">
+                                                                    <h4>目前沒有任何折扣劵</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-white btn-default"
+                                                        data-bs-dismiss="modal">取消</button>
+                                                    <button type="button"
+                                                        class="btn btn-primary shadow-none">確認</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </div> 
+                                        
+               
+                <!-- 付款 付款明細 -->
+                <div class="accordion mb-3" id="accordionExample">
+                    <div class="accordion-item">
+                        <div class="accordion-header border-bottom" id="headingfive">
+                            <div class="bg-white d-flex align-items-center my-4 " data-bs-toggle="collapse"
+                                data-bs-target="#Paymentdetails">
+                                <i class="fa-solid fa-chevron-down mx-3"></i>
+                                <h4 class="page-head ">付款明細</h4>
+                            </div>
+                        </div>
+                      <div id="Paymentdetails" class="accordion-collapse collapse" aria-labelledby="headingfive"data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                                 
+                                @foreach (var od in Model.OrderProduct)
+                                {
+                                    <div class="cart-group d-flex flex-wrap align-items-center justify-content-around">
+                                        <a href="#" class=" rounded-3 img-fluid col-md-4">
+                                            <img class="product-img img-bg w-100 col-sm-4"
+                                                src="@od.Photo">
+                                        </a>
+                                        <div class="car-detail col-sm-8 mb-1 col-md-7">
+                                            <div class="product-detail">
+                                                <h3 class="title my-2">
+                                                    <a href="#" class="product_detail_text text-dark" target="_blank" onclick="event.stopPropagation()">
+                                                        <span style="font-size: smaller">@od.ProductName</span>
+                                                    </a>
+                                                </h3>
+                                                <div class="product-option text-dark my-3">@od.ProgramTitle</div>
+                                                <div class="product-option mb-3">@od.SceenLists</div>
+
+                                            </div>
+
+                                            <div class="critical-info d-inline-block ">
+                                                <i class="fa-solid fa-calendar-days me-2"></i>
+                                                <span>@od.DepartureDate</span>
+                                            </div>
+
+                                            <div class="price-detail py-3 border-bottom">
+                                                <i class="fa-solid fa-person me-2"></i>
+                                                <span>@(od.Itemtext) x @(od.Quantity) @(od.UnitText)</span>
+                                                <div class="pull-right" style="float: right;">
+                                                    @od.UnitPrice
+                                                </div>
+                                            </div>
+                                            <div class="mt-10 text-heavy py-3">
+                                                <span>總金額</span>
+                                                <div class="TWD" style="float: right;">
+                                                    TWD @((int)od.UnitPrice * od.Quantity)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                  
+                                    totalPrice += ((int)od.UnitPrice * od.Quantity);
+                                }
+                             <div class="mt-10 text-heavy p-3 mx-3">
+                                        <span>支付金額</span>
+                                        <div class="TWD" style="float: right;">TWD @totalPrice
+                                        </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="accordion my-3 " id="accordionExample">
+                    <div class="accordion-item">
+
+                        <div class="caculate d-flex justify-content-end my-3">
+                            <div class="total me-3">
+                                
+                                <span class=" fw-bolder fs-3 mt-2">TWD @totalPrice</span>
+                            </div>
+                            <a href="~/Ecpay/CheckOut" class="fw-bolder me-3">前往結帳</a>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+

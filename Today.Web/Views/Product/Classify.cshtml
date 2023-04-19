@@ -1,0 +1,469 @@
+﻿@using Newtonsoft.Json
+@using Today.Web.ViewModels
+@model ClassifyVM
+@*@{
+    var cityJson = JsonConvert.SerializeObject(Model.AllFilters.CityFilterList);
+    var categoryJson = JsonConvert.SerializeObject(Model.AllFilters.CategoryFilterList);
+    }*@
+
+<!-- 導覽列 -->
+@*導覽列下的三個BUTTON*@
+<div class="w-100 h-100 position-absolute bg-dark d-none" style="z-index: 49;" id="coverplate"></div>
+<div class="container city-filter-wrap position-fixed pt-3">
+    <div class="sidebar d-flex mx-0 px-3 bg-white">
+        <!-- 第一版 目的地-->
+        <div class="city-filter-btn d-flex">
+            <button class="btn btn-white shadow-none mx-1 my-2 text-nowrap rounded-pill" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+                目的地<i class="fa-solid fa-caret-down ms-2"></i>
+            </button>
+        </div>
+        <!-- 目的地-展開 -->
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
+            aria-labelledby="offcanvasBottomLabel">
+            <!-- 目的地-導覽列 -->
+            <div class="offcanvas-header border-bottom">
+                <button id="button-demo" type="button" class="btn-clean-destination text-reset border-0 bg-white"
+                    aria-label="Close">清除</button>
+                <h5 class="offcanvas-title m-auto" id="offcanvasBottomLabell">目的地</h5>
+                <button type="button" class="btn-finish-destination text-reset border-0 bg-white">完成</button>
+            </div>
+            <div class="offcanvas-body small">
+                <div class="filter-group rounded pt-3 mb-3">
+                    <!-- 搜尋input -->
+                    <div class="input-group">
+                        <div
+                            class="input-group-text d-flex fa-solid fa-magnifying-glass bg-white ms-1 rounded-pill w-100">
+                            <input class="form-control search border-0 ms-2" type="search" placeholder="搜尋目的地 ">
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0">
+                        <!-- checkbox標題 -->
+                        <div class="accordion-header text-dark mt-3 ms-2 me-1" id="headingOne">
+                            <h2 class="accordion-button collapsed fw-normal" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                台灣
+                            </h2>
+                        </div>
+                        <!-- checkbox內文 -->
+                        <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body-input m-2">
+                                @* @foreach (var item in Model.ClassifyCardList)
+                                    {
+                                    <div class="form-check pb-2">
+                                    <label class="form-check-label ms-1 mt-1">
+                                    <input class="form-check-input mt-0 city_PC shadow-none" type="checkbox"
+                                    value="@item.CityId" onchange="postAndChangePages(); ">@item.CityId
+                                    </label>
+                                    </div>
+                                    } *@
+                                <div class="form-check pb-2">
+                                    <div v-for="(city,idx) in allFilter.cities" class="form-check pb-2">
+                                        <label class="form-check-label ms-1 mt-1">
+                                            <input class="form-check-input mt-0 city_PC shadow-none" type="checkbox"
+                                                :value="city.CityId" v-model="city.Checked"
+                                                v-on:change="filterPost(1)">{{city.CityName}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二個版 更多條件 -->
+        <div class="city-filter-btn d-flex ps-1">
+            <button class="btn btn-white shadow-none mx-1 my-2 text-nowrap rounded-pill" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#moreconditions" aria-controls="moreconditions">
+                更多條件<i class="fa-solid fa-caret-down ms-2"></i>
+            </button>
+        </div>
+        <!-- 更多條件-展開 -->
+        <div class="offcanvas offcanvas-bottom rounded-top" tabindex="-1" id="moreconditions"
+            aria-labelledby="offcanvasBottomLabel">
+            <!-- 更多條件-導覽列 -->
+            <div class="offcanvas-header border-bottom">
+                <button type="button" class="btn-clean-destination text-reset border-0 bg-white"
+                    aria-label="Close">清除</button>
+                <h5 class="moreconditions offcanvas-title m-auto" id="offcanvasBottomLabell">更多條件</h5>
+                <button type="button" class="btn-finish-destination text-reset border-0 bg-white">完成</button>
+            </div>
+            <!-- 裡面內文 -->
+            <div class="offcanvas-body small p-0">
+                <!-- 使用日 -->
+                <div class="filter-group rounded">
+                    <div class="filter-block">
+                        <!-- 使用日-請選擇使用日 -->
+                        <dib class="accordion-header" id="Attractions">
+                            <h4 class=" collapsed fw-normal border-bottom d-flex " data-bs-target="#collapsedayofuse"
+                                aria-expanded="false">
+                                <input type="button" name="datefilter" value="請選出發日期"
+                                    class="fa-regular fa-calendar btn btn-outline-white text-dark flex-grow-1 fs-6 fw-bolder lh-lg"
+                                    placeholder="篩選出發日期" id="collapsedayofuse" line-height: 2;">
+                                @*<span class="fs-6 px-3 py-2 ms-1 w-100 d-flex justify-content-between
+                                    align-items-center ">
+                                    請選擇使用日
+                                    </span>*@
+                            </h4>
+                        </dib>
+                    </div>
+                </div>
+                <!-- 更多條件 -->
+                <div class="filter-group rounded mb-1">
+                    <div class="filter-block ">
+                        <!-- 更多條件-所有商品類別 -->
+                        <div class="accordion-header " id="Attractions">
+                            <h4 class="accordion-button collapsed fw-normal " data-bs-toggle="collapse"
+                                data-bs-target="#collapseAttractiontickets1" aria-expanded="false">
+                                所有商品類別
+                            </h4>
+                        </div>
+                        <!-- 更多條件-所有商品類別-類別內容 -->
+                        <div id="collapseAttractiontickets1" class="accordion-collapse collapse px-2"
+                            data-bs-parent="#accordionExample">
+                            @*<partial name="ClassifyCollapsePartial/_CollapsePartial"
+                                for="AllFilters.CategoryFilterList" />*@
+                            <partial name="ClassifyCollapsePartial/_CollapsePartial_vue" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三個版 排序 -->
+        <div class="city-filter-btn d-flex ps-1">
+            <button class="btn btn-white shadow-none mx-1 my-2 text-nowrap rounded-pill" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sort" aria-controls="sort">
+                排序<i class="fa-solid fa-caret-down ms-2"></i>
+            </button>
+        </div>
+        <!-- 排序-展開 -->
+        <div class="sort offcanvas offcanvas-bottom" tabindex="-1" id="sort" aria-labelledby="offcanvasBottomLabel">
+            <!-- 排序-導覽列 -->
+            <div class="offcanvas-header border-bottom">
+                <button type="button" class="btn-clean-destination text-reset border-0 bg-white"
+                    aria-label="Close">清除</button>
+                <h5 class="offcanvas-title m-auto" id="offcanvasBottomLabell">排序</h5>
+                <button type="button" class="btn-finish-destination text-reset border-0 bg-white">完成</button>
+            </div>
+            <!-- 排序-內文 -->
+            <div class="offcanvas-body small px-0">
+                <div class="accordion-item border-0 ">
+                    <div class="form-check mb-2 py-2 border-bottom d-flex align-items-center justify-content-between">
+                        <label class="form-check-label ms-2 mt-1 " for="Taipei">KKday 推薦</label>
+                        <i class="fa-solid fa-check me-4"></i>
+                    </div>
+                    <div class="form-check mb-2 py-2 border-bottom d-flex align-items-center justify-content-between">
+                        <label class="form-check-label ms-2 mt-1" for="Taichung">熱門程度 : 高至低</label>
+                        <i class="fa-solid fa-check me-4"></i>
+                    </div>
+                    <div class="form-check mb-2 py-2 d-flex align-items-center justify-content-between">
+                        <label class="form-check-label ms-2 mt-1" for="Kaohsiung">價格 : 低至高</label>
+                        <i class="fa-solid fa-check me-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid-ProductList ">
+    <section class="container m-auto">
+        <div class="container row p-0 m-0" id="classifyCard">
+            <!--左側欄 -->
+            <div class="col-lg-3 product-filter px-3 pt-3">
+                <!-- 篩選目的地 -->
+                <div class="filter-group rounded pt-3 mb-3">
+                    <div class="filter-block py-2 pb-3 ps-3 ">
+                        <h4>篩選目的地</h4>
+                    </div>
+                    <div class="input-group d-flex pt-1 pb-2 ps-2">
+                        <div class="input-group-text fa-solid fa-magnifying-glass border-end-0 bg-white ms-1">
+                        </div>
+                        <input id="destFilter" name="searchword"
+                            class="form-control search border-start-0 me-4 shadow-none" type="text"
+                            placeholder="搜尋目的地 ">
+                    </div>
+                    <div class="accordion-item ">
+                        <div class="accordion-header" id="headingOne">
+                            <h2 class="accordion-button collapsed fw-normal" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">台灣
+                            </h2>
+                        </div>
+                        <!-- 台灣checkbox -->
+                        <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body-input m-2">
+                                <div class="form-check pb-2">
+                                    <div v-for="(city,idx) in allFilter.cities" class="form-check pb-2">
+                                        <label class="form-check-label ms-1 mt-1">
+                                            <input class="form-check-input mt-0 city_PC shadow-none" type="checkbox"
+                                                :value="city.CityId" v-model="city.Checked"
+                                                v-on:change="filterPost(1)">{{city.CityName}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 所有商品類別 -->
+                <div class="filter-group rounded py-2 mb-1">
+                    <div class="filter-block py-3 ps-3">
+                        <h4>所有商品類別</h4>
+                    </div>
+                    <!-- 商品類別checkbox -->
+                    <partial name="ClassifyCollapsePartial/_CollapsePartial_vue" />
+                    @*for="AllFilters.CategoryFilterList"*@
+                </div>
+                <!-- 篩選出發日期 -->
+                <div class="filter-group date rounded ">
+                    <div class="filter-block mt-3">
+                        <div class="accordion-item">
+                            <div class="input-group p-2 mb-3">
+                                <label for="" class="w-100">
+                                    <button
+                                        class="fa-regular fa-calendar btn btn-outline-white text-dark border-end p-2 shadow-none"
+                                        type="button" name="datefilter">
+                                    </button>
+                                    <input type="button" name="datefilter" value="篩選出發日期"
+                                        class="fa-regular fa-calendar btn btn-outline-white text-dark flex-grow-1 fs-6 fw-bolder"
+                                        placeholder="篩選出發日期">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 價錢 range -->
+@*                <div class="filter-group rounded ">
+                    <div class="filter-block mt-3">
+                        <div class="accordion-item">
+                            <div class="accordion-header pt-3 pb-4 mx-3" id="headingThree">
+                                <h4 class="Pricies">價錢 (TWD)</h4>
+                                <div class="wrapper">
+                                    <div class="wrapper pt-3">
+                                        <span id="range1">
+                                            0
+                                        </span>
+                                        <span> &dash; </span>
+                                        <span id="range2">
+                                            2,928,980
+                                        </span>
+                                    </div>
+                                    <div class="container mt-4">
+                                        <div class="slider-track "></div>
+                                        <input class="bg-white shadow-none" type="range" min="0" max="99999" value="00"
+                                            id="slider-1" oninput="slideOne()">
+                                        <input type="range" min="0" max="99999" value="123456" id="slider-2"
+                                            oninput="slideTwo()">
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="rounded-circle" style="left:0%;"></span>
+                        </div>
+                    </div>
+                </div>
+*@            </div>
+            <!--右側欄 -->
+            <div class="col-lg-9 pt-3 p-2">
+                <!-- 體驗行程 -->
+                <div class="card-board mb-3 border-0">
+                    <div class="card-board mb-3 border-0">
+                        <div class="card-board mb-3 border-0">
+                            <div class="card-body text-secondary">
+                                <div class="chip-group d-flex flex-wrap">
+                                    <h4 class="card-title_group align-self-center ms-1 d-flex flex-wrap">
+                                        <span
+                                            class="experience-itinerary text-dark align-self-center mx-1 fw-normal">{{cardCount}}</span>項體驗行程
+                                    </h4>
+                                    <span v-for="(city,idx) in allFilter.cities.filter(x => x.Checked)"
+                                        class="rounded-pill border border-secondary d-flex align-items-center">
+                                        <span class="">{{city.CityName}}</span>
+                                        <button v-on:click="cancel(city)" type="button" class="btn-close shadow-none"
+                                            aria-label="Close"></button>
+                                    </span>
+                                    <span
+                                        v-for="(childCategory,idx) in allFilter.categories.map(ca=> ca.ChildCategory).flatMap(x => x).filter(x => x.Checked)"
+                                        class="rounded-pill border border-secondary d-flex align-items-center">
+                                        <span class="">{{childCategory.CategoryName}}</span>
+                                        <button v-on:click="cancel(childCategory)" type="button"
+                                            class="btn-close shadow-none" aria-label="Close"></button>
+                                    </span>
+                                    <span
+                                        v-if="allFilter.cities.some(x=> x.Checked)||allFilter.categories.some(ca=> ca.ChildCategory.some(x=> x.Checked))"
+                                        class="chip-clear rounded-pill d-flex align-items-center">
+                                        <a href="#" class="a text-decoration-none text-light"
+                                            v-on:click="cancelAll()">清除所有</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="sorting-group card-footer bg-transparent d-flex flex-wrap py-3 ps-4 border-bottom-0 align-items-center">
+                            <h5 class=" me-2">排序 : </h5>
+                            <div v-for="(todayrecommend,i) in allsort" class="sort">
+                                <span class="span_divider mx-1 "> | </span>
+                                <i :class="todayrecommend.SortIcon"></i>
+
+                                <span class="todayrecommend " :class="{active: todayrecommend.checked}"
+                                    :value="todayrecommend.SortId"
+                                    v-on:click="changeSort(todayrecommend)">{{(todayrecommend.SortName)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 橫向卡牌 -->
+                <div class="container_card">
+                    <div v-for="(item,idx) in productCards" class="card_detail mb-3">
+                        <a :href="item.href">
+                            <div class="row g-0">
+                                <div class="col-md-4 ">
+                                    <div class="pic">
+                                        <img class="img-fluid  m-auto" :src="item.path">
+                                    </div>
+                                </div>
+                                <div class="col-md-8 rounded-3 ">
+                                    <div class="card-body">
+                                        <h4 class="card-title text-secondary">{{item.productName}}</h4>
+                                        <div class="card-point py-2 ">
+                                            <span v-for="t in  item.tagText"
+                                                class="label label-addational rounded-3 ">{{(t)}}</span>
+                                        </div>
+                                        <div class="product-listview_inco_info d-flex flex-wrap my-2 me-2">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <div class="product-listview_inco_info flex_item product-palce">
+                                                <p class="card-text d-flex ms-2"> {{item.cityName}} </p>
+                                            </div>
+                                            @*<i class="fa-regular fa-calendar ms-3"></i>
+                                                <div class="product-listview_inco_info product-time">
+                                                <p class="card-text ms-2">
+                                                最早可預訂日期 : 今日
+                                                </p>
+                                                </div>*@
+                                        </div>
+                                        <div class="footer  d-flex flex-wrap">
+                                            <div class="product_footer m-auto col-8 mt-3">
+                                                <i class="fa-solid fa-star"></i>{{item.ratingStar}}
+                                                <span class="number">{{(item.totalComment)}}</span>
+                                                <span class="span_divider mx-1"> | </span>
+                                                <i class="fa-solid fa-fire py-2">
+                                                    <span class="subscription ms-1">{{item.totalOrder}}個已訂購</span>
+                                                </i>
+                                            </div>
+                                            <div
+                                                class="doller d-flex flex-wrap justify-content-end align-items-baseline col-4 ps-2">
+                                                <p class="TWD-line OriginalPrice text-decoration-line-through m-0 mx-1">
+                                                    TWD {{item.prices.originalPrice}}</p>
+                                                @*<div class="discount mx-1 ms-2 p-1">73%OFF</div>*@
+                                                <h4 class="TWD d-flex Price justify-content-end p-1 mt-1 text-derk">TWD
+                                                    {{item.prices.price}}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <i v-if="item.favorite" :data-id="item.productId" class="fa-solid fa-heart btn-wish"></i>
+                        <i v-else class="fa-regular fa-heart btn-wish" :data-id="item.productId"></i>
+                    </div>
+
+                </div>
+                <!-- 頁數切換 -->
+                <div class=" page btn-group d-flex justify-content-center" role="group"
+                    aria-label="Basic radio toggle button group">
+                    <div v-for="(x,i) in Math.ceil(cardCount/10)">
+                        <label v-if="x == page" class="click_num btn  me-2"
+                            style="color: #fff; background-color: #26bec9;">
+                            <input type="radio" class="btn-check" name="pageRadio" autocomplete="off" :value="x"
+                                checked>{{x}}
+                        </label>
+                        <label v-else class="click_num btn me-2"
+                            style="border: 1px solid #eee;color: #999;background-color: #fff;">
+                            <input type="radio" class="btn-check" name="pageRadio" autocomplete="off" :value="x"
+                                v-on:change='filterPost(x)'>{{x}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section topCSS{
+<link rel="stylesheet" href="~/css/reset.css" />
+@*<link rel="stylesheet" href="~/css/daterangepicker.css" />*@
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="~/css/Classify.css">
+<link rel="stylesheet" href="~/css/MoneyRange.css">
+}
+@section endJS{
+<script>
+    let cityList = @Html.Raw(JsonConvert.SerializeObject(Model.AllFilters.CityFilterList));
+    let categoryList = @Html.Raw(JsonConvert.SerializeObject(Model.AllFilters.CategoryFilterList));
+    //let sortList = @Html.Raw(JsonConvert.SerializeObject(Model));
+    //console.log(cityList)
+    //console.log(categoryList)
+
+</script>
+@*<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>*@
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+@*<script src="~/js/calendar.js"></script>*@
+<script src="~/js/classifyCollect.js"></script>
+<script src="~/js/date.js"></script>
+@*<script type="text/javascript" src="~/js/classifyCollect.js"></script>*@
+<script src="~/js/datePicker.js"></script>
+
+@*vue*@
+@*<script src="https://cdn.jsdelivr.net/npm/vue@2.7.7/dist/vue.js"></script>*@
+<script src="~/lib/vue/vue.js"></script>
+<script src="~/js/ClassifyVue.js"></script>
+@*<script src="https://unpkg.com/vue@next"></script>*@
+
+<script>
+    //function filterGet() {
+    //    const request = new Request("/api/ClassifyApi/Classify");
+    //    fetch(request)
+    //}
+
+    //function makePill(cityInput) { //參數area , targetInput
+    //    //create
+    //    let dom = document.createElement('');
+
+    //    dom.innerText = cityInput.parentElement ?? .innerText //拿到label文字
+
+
+    //    //append
+    //    let area = document.createElement('span');
+    //    area.append(dom)
+    //    //之後再改 不確定的area 參數指定areai
+
+    //    //綁事件
+    //@* dom的xx 按了 要 把target取消勾選 *@
+    //}
+
+    @* function towNumber(val) {
+            return val.toFixed(2)
+
+            const refObject = {
+            get value() {
+            track(refObject, 'value')
+            return value
+            },
+            set value(newValue) {
+            value = newValue
+            trigger(refObject, 'value')
+            }
+            }
+            return refObject
+            } *@
+        @* towNumber(val) {
+            return val.toFixed(2)
+            }
+        *@
+</script>
+}

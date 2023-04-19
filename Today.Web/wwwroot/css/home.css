@@ -1,0 +1,161 @@
+/* 共同 */
+.choose-limit{
+    background-color: #ffffff;
+}
+.card-body{
+    box-sizing: border-box;
+}
+
+/* 分類 */
+.category-limit .category{
+    width: 80%;
+    height: 200px;
+    top: -70px;
+    left: 0;
+}
+.category-limit i{
+    color: #138184;
+}
+.category-limit p{
+    color: black;
+}
+
+/* big-info */
+.main-introd-limit {
+    background: url("https://cdn.kkday.com/pc-web/assets/img/home_banner/2.jpg");
+    height: 400px;
+}
+.main-introd-limit button{
+    background-color: #22a7aa;
+}
+.main-introd-limit button:hover{
+    opacity: 85%;
+}
+
+/* city */
+.city-limit .group-card{
+    height: 230px;
+}
+.city-details{
+    bottom: 20px;
+    left: 20px;
+    transition: all 1s ease;
+}
+.city-details span{
+    border: 1px solid white;
+    border-radius: 50px;
+    box-sizing: border-box;
+    transition: all 1s ease;
+}
+.city div, .footer .info, .pic{
+    box-sizing: border-box;
+}
+.group-card > div{
+    transition: all 0.1s ease;
+}
+
+/* TOP 10 */
+.fixed-card{
+    width: calc(100% - 1rem * 0.5 * 2);
+}
+/*.card-product-review:first-child{
+    border-right: 1px solid #ccc;
+}*/
+.hot-product-limit .orderby{
+    text-shadow: 0 1px 2px #e18d0e;
+    background: linear-gradient(45deg,#ffaf1e,#ffd56e);
+    bottom: 0;
+    left: 0;
+}
+
+/* 精選 */
+
+/*why choose */
+.choose-limit a{
+    background-color: #26bec9;
+}
+.choose-limit a:hover{
+    opacity: 85%;
+}
+/*.choose-limit .car{
+    bottom: 0px;
+    left: 0px;
+}*/
+/* .choose-limit .car{
+    bottom: -10px;
+    left: 0px;
+    transform: translateX(-50%);
+    transition: tranform 2s ease;
+} */
+
+/* other-selection */
+.other-selection-limit h5, .other-selection-limit ul{
+    width: 100%;
+}
+.other-selection-limit a:hover{
+    color: #51BAF8!important;
+}
+.other-selection-limit ul li, .footer-limit ul li{
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+    .group-card{
+        width: 100%;
+    }
+    .other-selection-limit .title-icon, .footer-limit .title-icon{
+        cursor: pointer;
+    }
+}
+@media screen and (min-width: 768px) {
+    .category{
+        height: 180px;
+    }
+    .card{
+        width: calc(100% / 3 - 1rem * 1);
+    }
+
+    /* TOP 10 */
+    .fixed-card{
+        width: calc(100% / 4 - 1rem * 0.5 * 2);
+    }
+    
+    /*其他選擇*/
+    .other-selection-limit .title-icon{
+        width: 25%;
+        border-right: 1px solid rgb(48, 48, 219);
+    }
+    .other-selection-limit ul{
+        width: 75%;
+        padding: 10px 20px;
+        box-sizing: border-box;
+    }
+
+    /* why choose */
+    .choose img{
+        margin-top: -100px;
+    }
+    .choose .reason, .choose .travel-pic{
+        box-sizing: border-box;
+    }
+    /*.choose-limit .car{
+        bottom: -10px;
+        left: 50px;
+    }*/
+}
+
+@media screen and (min-width: 992px) {
+    .card{
+        width: calc(100% / 6 - 1rem * 1);
+    }
+    /*.choose-limit .car{
+        bottom: -10px;
+        left: 100px;
+    }*/
+}
+
+@media screen and (min-width: 1440px) {
+    .category{
+        height: 150px;
+    }
+}

@@ -1,0 +1,45 @@
+﻿<div class="container-fluid">
+    <main role="main" class="pb-3">
+        <div class="row">
+            <div class="col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home/Index" target="_self" class="">首頁</a></li>
+                    <li class="breadcrumb-item active"><span aria-current="location">圖表總攬</span></li>
+                </ol>
+            </div>
+            <div class="col-xl-6 col-lg-6">
+                <!-- Line Chart -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">月銷售額</h6>
+                    </div>
+                    <div class="card-body pb-5">
+                        <div class="chart-area">
+                            <canvas id="lineChart" class="mh-75"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6 col-lg-6">
+                <!-- Bar Seven Chart -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">過去七天的營業額</h6>
+                    </div>
+                    <div class="card-body pb-5">
+                        <div class="chart-area">
+                            <canvas id="barChart" class="mh-75"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section endJS{
+<script src="~/lib/vendor/chart.js/Chart.js"></script>
+@*<script src="~/lib/vendor/chart.js/Chart.min.js"></script>*@
+<script src="~/js/Chart.js"></script>
+}
